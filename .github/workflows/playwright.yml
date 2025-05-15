@@ -1,0 +1,70 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📨 Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            playwright-browsers-${{ runner.os }}-
+
+      - name: 💾 Checkout gh-pages for history
+        if: always()
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: 🔄 Copy previous Allure history
+        if: always()
+        run: |
+          if [ -d gh-pages/history ]; then
+            mkdir -p allure-results/history
+            cp -R gh-pages/history/* allure-results/history/
+          fi
+
+      - name: 📦 Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: 🧪 Install Playwright Browsers
+        run: npm run pw:install:browsers:with-retry
+
+      - name: 👨‍💻 Install Allure CLI
+        run: npm install -g allure-commandline --save-dev
+
+      - name: ▶️ Run Playwright tests
+        id: playwright
+        continue-on-error: true
+        run: npm run pw:run:ci
+
+      - name: 🧪 Generate Allure Report
+        if: always()
+        run: npm run allure:generate
+
+      - name: ⬆️ Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 30
+
+      - name: ❌ Fail job if tests failed
+        if: steps.playwright.conclusion == 'failure'
+        run: exit 1

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "types": ["node"],
+    "baseUrl": "./",
+    "target": "es2021",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@pages/*": ["src/web_ui/pages/*"],
+      "@pw_tests/*": ["./tests/playwright/*"],
+    },
+    "esModuleInterop": true,
+    "allowJs": true,
+  }
+}
