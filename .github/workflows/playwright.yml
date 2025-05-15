@@ -40,10 +40,10 @@ jobs:
           fi
 
       - name: 📦 Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm run start
 
       - name: 🧪 Install Playwright Browsers
-        run: npm run pw:install:browsers:with-retry
+        run: npm run pw:install:browsers
 
       - name: 👨‍💻 Install Allure CLI
         run: npm install -g allure-commandline --save-dev

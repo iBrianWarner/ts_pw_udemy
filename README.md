@@ -2,7 +2,7 @@
 
 **Candidate name**: [Yaroslav Kostenko](https://www.linkedin.com/in/yaroslav-kostenko-45562515a/)
 
-This repository contains an end-to-end (E2E) testing framework built using Playwright + TS + Node.js. It is designed to automate testing for the [Udemy](https://www.udemy.com/).
+This repository contains an end-to-end (E2E) testing framework built using `Playwright` + `TS` + `Node.js`. It is designed to automate testing for the [Udemy](https://www.udemy.com/).
 
 ## Repository Structure
 
@@ -60,3 +60,10 @@ Open report:
 ```bash
 npm run allure:open
 ```
+
+## Additional info
+
+- `getByDataTestId` and `testIdAttribute` are used to work with test attributes because the website uses two types of test attributes.
+- `UiElementsHelper` is used to work with elements without testId attributes.
+- `getStealthChromium` is used to work with Captcha. But solution still requires improvement to automatically get the `cf_clearance` token.
+The A/B test is working on the search results page, which may affect the interface of the filters. This was not investigated until the end, as the test task was changed.
