@@ -66,5 +66,5 @@ jobs:
           retention-days: 30
 
       - name: ❌ Fail job if tests failed
-        if: steps.playwright.conclusion == 'failure'
+        if: steps.playwright.outcome == 'failure'
         run: exit 1
